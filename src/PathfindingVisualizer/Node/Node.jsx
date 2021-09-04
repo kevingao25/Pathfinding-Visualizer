@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import "./Node.css";
 
 export default class Node extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.isWall !== nextProps.isWall;
+    }
+
     render() {
         // Pass in the node type from props
         const {

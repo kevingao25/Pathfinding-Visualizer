@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
-import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
+import { dijkstra } from "../Algorithms/dijkstra";
 
 const START_NODE_ROW = 6;
 const START_NODE_COL = 12;
@@ -18,6 +18,10 @@ export default class PathfindingVisualizer extends Component {
             grid: [],
             mouseIsPressed: false,
         };
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.mouseIsPressed !== nextState.mouse;
     }
 
     // Create a single node with specified column and row
