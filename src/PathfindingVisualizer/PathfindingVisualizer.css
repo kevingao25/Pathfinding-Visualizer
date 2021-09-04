@@ -1,3 +1,13 @@
+html {
+    overflow: hidden;
+}
+
 .grid {
-    margin: 100px 0 0;
+    margin: 90px 0 0;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    /* border-bottom: 2px solid rgb(175, 200, 250); */
 }

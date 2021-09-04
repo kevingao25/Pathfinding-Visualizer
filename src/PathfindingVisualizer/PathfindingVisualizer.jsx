@@ -3,10 +3,13 @@ import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
 import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 10;
-const FINISH_NODE_COL = 35;
+const START_NODE_ROW = 6;
+const START_NODE_COL = 12;
+const FINISH_NODE_ROW = 23;
+const FINISH_NODE_COL = 60;
+
+const ROW_NUM = 30;
+const COL_NUM = 75;
 
 export default class PathfindingVisualizer extends Component {
     constructor() {
@@ -34,9 +37,9 @@ export default class PathfindingVisualizer extends Component {
     // Initialize the grid to the DOM
     componentDidMount() {
         const grid = [];
-        for (let row = 0; row < 20; row++) {
+        for (let row = 0; row < ROW_NUM; row++) {
             const currentRow = [];
-            for (let col = 0; col < 50; col++) {
+            for (let col = 0; col < COL_NUM; col++) {
                 currentRow.push(this.createNode(col, row));
             }
             grid.push(currentRow);
@@ -44,13 +47,26 @@ export default class PathfindingVisualizer extends Component {
         this.setState({ grid });
     }
 
+    animateDijkstra(visitedNodesInOrder) {
+        for (let i = 0; i < visitedNodesInOrder.length; i++) {
+            setTimeout(() => {
+                const node = visitedNodesInOrder[i];
+                if (!node.isStart && !node.isFinish) {
+                    document.getElementById(
+                        `node-${node.row}-${node.col}`
+                    ).className = "node node-visited";
+                }
+            }, 20 * i);
+        }
+    }
+
     visualizeDijkstra() {
-        // ?
         const grid = this.state.grid;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
         console.log(visitedNodesInOrder);
+        this.animateDijkstra(visitedNodesInOrder);
     }
 
     render() {
@@ -66,7 +82,7 @@ export default class PathfindingVisualizer extends Component {
                 <div className="grid">
                     {grid.map((row, rowIdx) => {
                         return (
-                            <div key={rowIdx}>
+                            <div key={rowIdx} className="row">
                                 {row.map((node, nodeIdx) => {
                                     const {
                                         row,
