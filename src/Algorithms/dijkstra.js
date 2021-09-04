@@ -14,7 +14,8 @@ export function dijkstra(grid, startNode, finishNode) {
         unvisitedNodes.sort((nodeA, nodeB) => nodeB.distance - nodeA.distance);
         const closestNode = unvisitedNodes.pop();
 
-        // Handle wall later
+        // If we encounter a wall, continue
+        if (closestNode.isWall) continue;
 
         // Cases where we return the visitedNodesInOrder
         closestNode.isVisited = true;
