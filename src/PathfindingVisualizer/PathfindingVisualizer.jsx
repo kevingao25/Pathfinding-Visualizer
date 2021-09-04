@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
-import { dijkstra } from "../Algorithms/dijkstra";
+import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
 
 const START_NODE_ROW = 6;
 const START_NODE_COL = 12;
@@ -64,7 +64,7 @@ export default class PathfindingVisualizer extends Component {
                 row,
                 col
             );
-            this.setState({ grid: newGrid });
+            this.setState({ grid: newGrid, mouseIsPressed: true });
         }
     }
 
@@ -72,8 +72,16 @@ export default class PathfindingVisualizer extends Component {
         this.setState({ mouseIsPressed: false });
     }
 
-    animateDijkstra(visitedNodesInOrder) {
-        for (let i = 0; i < visitedNodesInOrder.length; i++) {
+    // visualizeDijkstra -> animateDijkstra -> animateShortestPath
+    animateDijkstra(visitedNodesInOrder, nodeInShortestPathOrder) {
+        for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+            // Animate the shortest path after animating dijkstra
+            if (i === visitedNodesInOrder.length) {
+                setTimeout(() => {
+                    this.animateShortestPath(nodeInShortestPathOrder);
+                }, 2 * i);
+                return;
+            }
             setTimeout(() => {
                 const node = visitedNodesInOrder[i];
                 if (!node.isStart && !node.isFinish) {
@@ -85,13 +93,40 @@ export default class PathfindingVisualizer extends Component {
         }
     }
 
+    // Part of visualizeDijkstra
+    animateShortestPath(nodeInShortestPathOrder) {
+        for (let i = 0; i < nodeInShortestPathOrder.length; i++) {
+            setTimeout(() => {
+                const node = nodeInShortestPathOrder[i];
+                if (!node.isStart && !node.isFinish) {
+                    document.getElementById(
+                        `node-${node.row}-${node.col}`
+                    ).className = "node node-shortest-path";
+                }
+            }, 30 * i);
+        }
+
+        // test
+        // for (let row = 0; row < ROW_NUM; row++) {
+        //     for (let col = 0; col < COL_NUM; col++) {
+        //         const node = this.state.grid[row][col];
+        //         if (!node.isVisited) {
+        //             document.getElementById(`node-${row}-${col}`).className =
+        //                 "node node-unvisited";
+        //         }
+        //     }
+        // }
+    }
+
     visualizeDijkstra() {
         const grid = this.state.grid;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-        console.log(visitedNodesInOrder);
-        this.animateDijkstra(visitedNodesInOrder);
+        const nodeInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+        this.animateDijkstra(visitedNodesInOrder, nodeInShortestPathOrder);
+
+        console.log("finish");
     }
 
     render() {

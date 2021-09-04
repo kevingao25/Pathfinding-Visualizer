@@ -13,15 +13,17 @@
 
 .node-finish {
     background-color: red;
+    box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
 }
 
 .node-start {
     background-color: #80ed99;
+    box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
 }
 
 .node-wall {
     background-color: rgb(12, 53, 71);
-    animation: wallAnimation 0.05s ease forwards;
+    animation: wallAnimation 0.05s ease-out;
 }
 
 @keyframes wallAnimation {
@@ -42,6 +44,10 @@
     animation: visitedAnimation 0.5s ease forwards;
 }
 
+.node-unvisited {
+    background-color: rgb(255, 164, 164);
+}
+
 @keyframes visitedAnimation {
     50% {
         background-color: red;
@@ -53,5 +59,33 @@
 
     100% {
         background-color: rgba(0, 190, 218, 0.75);
+    }
+}
+
+.node-shortest-path {
+    animation-name: shortestPath;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-direction: alternate;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+@keyframes shortestPath {
+    0% {
+        transform: scale(0.6);
+        background-color: #3db2ff;
+    }
+
+    50% {
+        transform: scale(1.2);
+        background-color: #2a0944;
+    }
+
+    100% {
+        transform: scale(1);
+        background-color: #ffd371;
+        /* outline: 1px solid #003638; */
+        box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
     }
 }

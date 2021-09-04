@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Node.css";
 
 export default class Node extends Component {
+    // Only re-render the node if the prop of node has change.
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.isWall !== nextProps.isWall;
     }
@@ -37,9 +38,9 @@ export default class Node extends Component {
             <div
                 id={`node-${row}-${col}`}
                 className={`node ${extraClassName}`}
-                onMouseDown={() => onMouseDown(row, col)}
-                onMouseEnter={() => onMouseEnter(row, col)}
                 onMouseUp={() => onMouseUp()}
+                onMouseEnter={() => onMouseEnter(row, col)}
+                onMouseDown={() => onMouseDown(row, col)}
             ></div>
         );
     }
