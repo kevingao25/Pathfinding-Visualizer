@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Node from "./Node/Node";
+import "bootswatch/dist/lux/bootstrap.min.css";
 import "./PathfindingVisualizer.css";
 import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
 
@@ -8,8 +9,8 @@ const START_NODE_COL = 12;
 const FINISH_NODE_ROW = 23;
 const FINISH_NODE_COL = 60;
 
-const ROW_NUM = 30;
-const COL_NUM = 75;
+const ROW_NUM = 28;
+const COL_NUM = window.innerWidth / 25 - 1;
 
 export default class PathfindingVisualizer extends Component {
     constructor() {
@@ -133,7 +134,9 @@ export default class PathfindingVisualizer extends Component {
         const { grid, mouseIsPressed } = this.state;
         return (
             <div className="main">
-                <h1>Pathfinding Visualizer</h1>
+                <h1 onClick={() => window.location.reload(false)}>
+                    Pathfinding Visualizer
+                </h1>
                 <button onClick={() => this.visualizeDijkstra()}>
                     Visualize Dijkstra's Algorithm
                 </button>
@@ -142,7 +145,7 @@ export default class PathfindingVisualizer extends Component {
                 <div className="grid">
                     {grid.map((row, rowIdx) => {
                         return (
-                            <div key={rowIdx} className="row">
+                            <div key={rowIdx} className="row-default">
                                 {row.map((node, nodeIdx) => {
                                     const {
                                         row,

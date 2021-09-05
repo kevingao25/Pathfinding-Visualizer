@@ -3,11 +3,23 @@
 } */
 
 .grid {
-    margin: 90px 0 0;
+    margin: 40px 0 0;
     box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
 }
 
-.row {
+.row-default {
     display: flex;
     justify-content: center;
+}
+
+/* .row-default:last-child {
+    border-right: 20px solid rgb(175, 200, 250);
+} */
+
+h1 {
+    margin-top: 3rem;
+}
+
+.main {
+    height: 100%;
 }
