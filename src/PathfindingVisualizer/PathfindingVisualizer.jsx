@@ -180,10 +180,16 @@ export default class PathfindingVisualizer extends Component {
                     <Navbar></Navbar>
                     <div className="fireBtn">
                         <h1>Pathfinding Visualizer</h1>
-                        <button onClick={() => this.visualizeDijkstra()}>
+                        <button
+                            className="bg-info"
+                            onClick={() => this.visualizeDijkstra()}
+                        >
                             Visualize Dijkstra's Algorithm
                         </button>
-                        <button onClick={() => this.clearGrid()}>
+                        <button
+                            className="bg-dark text-light"
+                            onClick={() => this.clearGrid()}
+                        >
                             Clear Board
                         </button>
                     </div>
