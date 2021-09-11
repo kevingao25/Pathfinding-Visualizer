@@ -68,7 +68,7 @@
 
 .node-shortest-path {
     animation-name: shortestPath;
-    animation-duration: 1.5s;
+    animation-duration: 0.3s;
     animation-timing-function: ease-out;
     animation-direction: alternate;
     animation-fill-mode: forwards;
@@ -80,12 +80,6 @@
         transform: scale(0.6);
         background-color: #3db2ff;
     }
-
-    50% {
-        transform: scale(1.2);
-        background-color: #2a0944;
-    }
-
     100% {
         transform: scale(1);
         background-color: #ffd371;

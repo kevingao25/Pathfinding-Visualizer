@@ -13,7 +13,7 @@ export default class Navbar extends Component {
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/#">
-                        Navbar
+                        Pathfinding Visualizer
                     </a>
                     <button
                         className="navbar-toggler"
@@ -32,55 +32,39 @@ export default class Navbar extends Component {
                         id="navbarColor01"
                     >
                         <ul className="navbar-nav me-auto">
-                            <li className="nav-item">
-                                <a className="nav-link active" href="#">
-                                    Home
-                                    <span className="visually-hidden">
-                                        (current)
-                                    </span>
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">
-                                    Features
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">
-                                    Pricing
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">
-                                    About
-                                </a>
-                            </li>
                             <li className="nav-item dropdown">
                                 <a
                                     className="nav-link dropdown-toggle"
                                     data-bs-toggle="dropdown"
-                                    href="#"
+                                    href="/#"
                                     role="button"
                                     aria-haspopup="true"
                                     aria-expanded="false"
                                 >
-                                    Dropdown
+                                    Select Algorithms
                                 </a>
                                 <div className="dropdown-menu">
-                                    <a className="dropdown-item" href="#">
-                                        Action
+                                    <a className="dropdown-item" href="/#">
+                                        Dijkstra
                                     </a>
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="/#">
                                         Another action
                                     </a>
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="/#">
                                         Something else here
                                     </a>
+
                                     <div className="dropdown-divider"></div>
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="/#">
                                         Separated link
                                     </a>
                                 </div>
+                            </li>
+
+                            <li className="nav-item">
+                                <a className="nav-link" href="/#">
+                                    Generate Maze
+                                </a>
                             </li>
                         </ul>
                     </div>

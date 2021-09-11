@@ -2,15 +2,17 @@ import React, { Component } from "react";
 import Node from "./Node/Node";
 import "bootswatch/dist/lux/bootstrap.min.css";
 import "./PathfindingVisualizer.css";
+import Navbar from "./navbar";
 import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
 
-const START_NODE_ROW = 6;
-const START_NODE_COL = 12;
-const FINISH_NODE_ROW = 23;
-const FINISH_NODE_COL = 60;
+const ROW_NUM = Math.floor((window.innerHeight * 0.75) / 25);
+const COL_NUM = Math.floor(window.innerWidth / 25);
+console.log(ROW_NUM, COL_NUM);
 
-const ROW_NUM = 28;
-const COL_NUM = window.innerWidth / 25 - 1;
+const START_NODE_ROW = 6;
+const START_NODE_COL = 7;
+const FINISH_NODE_ROW = ROW_NUM - 5;
+const FINISH_NODE_COL = COL_NUM - 5;
 
 export default class PathfindingVisualizer extends Component {
     constructor() {
@@ -18,6 +20,7 @@ export default class PathfindingVisualizer extends Component {
         this.state = {
             grid: [],
             mouseIsPressed: false,
+            visualizing: false,
         };
     }
 
@@ -39,8 +42,7 @@ export default class PathfindingVisualizer extends Component {
         };
     }
 
-    // Initialize the grid to the DOM
-    componentDidMount() {
+    setInitialGrid() {
         const grid = [];
         for (let row = 0; row < ROW_NUM; row++) {
             const currentRow = [];
@@ -50,6 +52,37 @@ export default class PathfindingVisualizer extends Component {
             grid.push(currentRow);
         }
         this.setState({ grid });
+    }
+
+    // Initialize the grid to the DOM
+    componentDidMount() {
+        this.setInitialGrid();
+    }
+
+    clearPath() {
+        if (this.state.visualizing === false) {
+            for (let row = 0; row < ROW_NUM; row++) {
+                for (let col = 0; col < COL_NUM; col++) {
+                    if (
+                        document.getElementById(`node-${row}-${col}`)
+                            .className === "node node-shortest-path" ||
+                        document.getElementById(`node-${row}-${col}`)
+                            .className === "node node-visited"
+                    ) {
+                        document.getElementById(
+                            `node-${row}-${col}`
+                        ).className = "node";
+                    }
+                }
+            }
+        }
+    }
+
+    clearGrid() {
+        if (this.state.visualizing === false) {
+            this.clearPath();
+            this.setInitialGrid();
+        }
     }
 
     // Handle mouse events for wall setting
@@ -107,6 +140,11 @@ export default class PathfindingVisualizer extends Component {
             }, 30 * i);
         }
 
+        setTimeout(() => {
+            this.setState({ visualizing: false });
+        }, 30 * nodeInShortestPathOrder.length);
+        // Allow clear board
+
         // test
         // for (let row = 0; row < ROW_NUM; row++) {
         //     for (let col = 0; col < COL_NUM; col++) {
@@ -120,26 +158,36 @@ export default class PathfindingVisualizer extends Component {
     }
 
     visualizeDijkstra() {
-        const grid = this.state.grid;
-        const startNode = grid[START_NODE_ROW][START_NODE_COL];
-        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-        const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-        const nodeInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-        this.animateDijkstra(visitedNodesInOrder, nodeInShortestPathOrder);
-
-        console.log("finish");
+        if (this.state.visualizing === false) {
+            this.clearPath();
+            this.setState({ visualizing: true });
+            const grid = this.state.grid;
+            const startNode = grid[START_NODE_ROW][START_NODE_COL];
+            const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+            const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+            const nodeInShortestPathOrder =
+                getNodesInShortestPathOrder(finishNode);
+            this.animateDijkstra(visitedNodesInOrder, nodeInShortestPathOrder);
+            console.log("finish");
+        }
     }
 
     render() {
         const { grid, mouseIsPressed } = this.state;
         return (
             <div className="main">
-                <h1 onClick={() => window.location.reload(false)}>
-                    Pathfinding Visualizer
-                </h1>
-                <button onClick={() => this.visualizeDijkstra()}>
-                    Visualize Dijkstra's Algorithm
-                </button>
+                <div className="main-navigation">
+                    <Navbar></Navbar>
+                    <div className="fireBtn">
+                        <h1>Pathfinding Visualizer</h1>
+                        <button onClick={() => this.visualizeDijkstra()}>
+                            Visualize Dijkstra's Algorithm
+                        </button>
+                        <button onClick={() => this.clearGrid()}>
+                            Clear Board
+                        </button>
+                    </div>
+                </div>
 
                 {/* Initialize the grid */}
                 <div className="grid">
