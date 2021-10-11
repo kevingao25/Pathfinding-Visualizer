@@ -1,7 +1,17 @@
 .navbar > .container-fluid {
-    width: 85%;
+	width: 85%;
 }
 
 .navbar {
-    box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
+	box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
+}
+
+.fireBtn {
+	height: auto;
+	margin: 0 auto;
+}
+
+button {
+	width: 240px;
+	/* padding: 10px; */
 }
