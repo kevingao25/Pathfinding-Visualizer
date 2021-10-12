@@ -12,13 +12,13 @@ export function Astar(grid, startNode, finishNode) {
 	while (!nodesToVisit.isEmpty()) {
 		const currentMinDistanceNode = nodesToVisit.remove();
 		if (currentMinDistanceNode === finishNode) break;
-		// visitedNodesInOrder.push(currentMinDistanceNode);
+		visitedNodesInOrder.push(currentMinDistanceNode);
 
 		const neighbors = getNeighboringNodes(currentMinDistanceNode, grid);
 
 		for (const neighbor of neighbors) {
 			if (neighbor.isWall) continue; // neighbor is a wall
-			visitedNodesInOrder.push(neighbor);
+			// visitedNodesInOrder.push(neighbor);
 
 			const tentativeDistanceToNeighbor =
 				currentMinDistanceNode.distance + 1;

@@ -5,6 +5,7 @@ import "./PathfindingVisualizer.css";
 import Navbar from "./navbar";
 import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
 import { Astar, reconstructPath } from "../Algorithms/Astar";
+import { randomMaze } from "../Algorithms/randomMaze";
 
 const ROW_NUM = Math.floor((window.innerHeight * 0.75) / 25);
 const COL_NUM = Math.floor(window.innerWidth / 25);
@@ -23,6 +24,7 @@ export default class PathfindingVisualizer extends Component {
 			mouseIsPressed: false,
 			visualizing: false,
 			algorithm: "Dijkstra",
+			maze: "randomMaze",
 		};
 	}
 
@@ -82,11 +84,41 @@ export default class PathfindingVisualizer extends Component {
 		}
 	}
 
+	clearWall() {
+		if (this.state.visualizing === false) {
+			for (let row = 0; row < ROW_NUM; row++) {
+				for (let col = 0; col < COL_NUM; col++) {
+					if (
+						document.getElementById(`node-${row}-${col}`)
+							.className === "node node-wall"
+					) {
+						document.getElementById(
+							`node-${row}-${col}`
+						).className = "node";
+					}
+				}
+			}
+		}
+	}
+
 	clearGrid() {
 		if (this.state.visualizing === false) {
 			this.clearPath();
+			this.clearWall();
 			this.setInitialGrid();
 		}
+	}
+
+	createNewBoard() {
+		const grid = [];
+		for (let row = 0; row < ROW_NUM; row++) {
+			const currentRow = [];
+			for (let col = 0; col < COL_NUM; col++) {
+				currentRow.push(this.createNode(col, row));
+			}
+			grid.push(currentRow);
+		}
+		return grid;
 	}
 
 	// Handle mouse events for wall setting
@@ -114,6 +146,24 @@ export default class PathfindingVisualizer extends Component {
 
 	handleMouseUp() {
 		this.setState({ mouseIsPressed: false });
+	}
+
+	// Clear nodes states except wall
+	clearNodeStates() {
+		const grid = [];
+		for (let row = 0; row < ROW_NUM; row++) {
+			const currentRow = [];
+			for (let col = 0; col < COL_NUM; col++) {
+				const currNode = this.createNode(col, row);
+				const oldNode = this.state.grid[row][col];
+				if (oldNode.isWall) {
+					currNode.isWall = true;
+				}
+				currentRow.push(currNode);
+			}
+			grid.push(currentRow);
+		}
+		this.setState({ grid });
 	}
 
 	// visualizeAlgorithm -> animateVisitedNodes -> animateShortestPath
@@ -159,23 +209,12 @@ export default class PathfindingVisualizer extends Component {
 		setTimeout(() => {
 			this.setState({ visualizing: false });
 		}, 30 * nodeInShortestPathOrder.length);
-		// Allow clear board
-
-		// test
-		// for (let row = 0; row < ROW_NUM; row++) {
-		//     for (let col = 0; col < COL_NUM; col++) {
-		//         const node = this.state.grid[row][col];
-		//         if (!node.isVisited) {
-		//             document.getElementById(`node-${row}-${col}`).className =
-		//                 "node node-unvisited";
-		//         }
-		//     }
-		// }
 	}
 
 	visualizeAlgorithm() {
 		if (this.state.visualizing === true) return;
 		this.clearPath();
+		this.clearNodeStates();
 		this.setState({ visualizing: true });
 		const grid = this.state.grid;
 		const startNode = grid[START_NODE_ROW][START_NODE_COL];
@@ -195,11 +234,58 @@ export default class PathfindingVisualizer extends Component {
 		this.animateVisitedNodes(visitedNodesInOrder, nodeInShortestPathOrder);
 	}
 
+	// Visualize Maze generation
+	visualizeMaze() {
+		if (this.state.visualizing === true) return;
+		this.clearGrid();
+		this.setState({ visualizing: true });
+
+		const grid = this.state.grid;
+		const startNode = grid[START_NODE_ROW][START_NODE_COL];
+		const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+
+		let walls;
+
+		if (this.state.maze === "randomMaze") {
+			walls = randomMaze(grid, startNode, finishNode);
+			console.log(walls);
+		}
+
+		this.animateWalls(walls);
+	}
+
+	animateWalls(walls) {
+		if (walls === undefined) return;
+		const grid = this.createNewBoard();
+
+		for (let i = 0; i < walls.length; i++) {
+			// Animate the shortest path after animating dijkstra
+			setTimeout(() => {
+				const node = walls[i];
+				grid[node.row][node.col].isWall = true;
+				document.getElementById(
+					`node-${node.row}-${node.col}`
+				).className = "node node-wall";
+			}, 5 * i);
+		}
+		setTimeout(() => {
+			this.setState({ visualizing: false, grid });
+		}, 5 * walls.length);
+	}
+
 	handleAlgoSelection = (childData) => {
 		this.setState({ algorithm: childData });
 		// testing
 		setTimeout(() => {
 			console.log(this.state.algorithm);
+		}, 2000);
+	};
+
+	handleMazeSelection = (childData) => {
+		this.setState({ maze: childData });
+		// testing
+		setTimeout(() => {
+			console.log(this.state.maze);
 		}, 2000);
 	};
 
@@ -211,7 +297,9 @@ export default class PathfindingVisualizer extends Component {
 					<Navbar
 						clearGrid={() => this.clearGrid()}
 						selectAlgo={this.handleAlgoSelection}
-						fire={() => this.visualizeAlgorithm()}></Navbar>
+						selectMaze={this.handleMazeSelection}
+						fire={() => this.visualizeAlgorithm()}
+						generateMaze={() => this.visualizeMaze()}></Navbar>
 				</div>
 
 				{/* Initialize the grid */}

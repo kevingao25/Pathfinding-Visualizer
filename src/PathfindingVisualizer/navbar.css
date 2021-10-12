@@ -4,6 +4,7 @@
 
 .navbar {
 	box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
+	height: 7.5vh;
 }
 
 .fireBtn {

@@ -21,8 +21,13 @@ export default class Navbar extends Component {
 		this.props.selectAlgo(selection);
 	}
 
+	selectMaze(selection) {
+		this.setState({ maze: selection });
+		this.props.selectMaze(selection);
+	}
+
 	render() {
-		const { clearGrid, fire } = this.props;
+		const { clearGrid, fire, generateMaze } = this.props;
 
 		const algoName = this.state.algorithm;
 
@@ -116,28 +121,29 @@ export default class Navbar extends Component {
 										<a
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#">
-											Dijkstra
+											href="/#"
+											onClick={() =>
+												this.selectMaze("randomMaze")
+											}>
+											Random Maze
 										</a>
 										<a
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#">
-											Another action
+											href="/#"
+											onClick={() =>
+												this.selectMaze("Prim")
+											}>
+											Prim's Algorithm
 										</a>
 										<a
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#">
+											href="/#"
+											onClick={() =>
+												this.selectMaze("...")
+											}>
 											Something else here
-										</a>
-
-										<div className="dropdown-divider"></div>
-										<a
-											className="dropdown-item"
-											data-toggle="tab"
-											href="/#">
-											Separated link
 										</a>
 									</div>
 								</li>
@@ -153,7 +159,9 @@ export default class Navbar extends Component {
 				</nav>
 				<div className="fireBtn">
 					<h1>Pathfinding Visualizer</h1>
-					<button className="bg-info">Generate Maze</button>
+					<button className="bg-info" onClick={() => generateMaze()}>
+						Generate Maze
+					</button>
 					<button
 						className="bg-warning"
 						// Change later

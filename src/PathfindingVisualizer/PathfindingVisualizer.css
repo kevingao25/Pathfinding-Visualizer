@@ -3,12 +3,12 @@ html {
 }
 
 .main-navigation {
-	height: 25vh;
+	height: 23vh;
 }
 
 .grid {
 	/* margin: 40px 0 0; */
-	box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.3);
+	/* box-shadow: 3px 3px 20px 1px rgba(0, 0, 0, 0.3); */
 	height: 75vh;
 }
 
