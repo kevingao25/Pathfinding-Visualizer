@@ -28,7 +28,7 @@ export default class PathfindingVisualizer extends Component {
 			visualizing: false,
 			algorithm: "Dijkstra",
 			maze: "randomMaze",
-			speed: 2,
+			speed: 15,
 			nodeSize: "normal",
 		};
 	}
