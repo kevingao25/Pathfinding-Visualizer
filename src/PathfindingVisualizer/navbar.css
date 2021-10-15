@@ -12,6 +12,11 @@
 	margin: 0 auto;
 }
 
+.dropdown-item {
+	font-size: 15px !important;
+	font-family: "Nunito Sans" !important;
+}
+
 button {
 	width: 240px;
 	/* padding: 10px; */

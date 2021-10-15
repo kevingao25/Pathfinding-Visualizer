@@ -53,7 +53,7 @@ export default class Navbar extends Component {
 					<div className="container-fluid">
 						<a
 							className="navbar-brand"
-							href="/#"
+							href="/Pathfinding-Visualizer"
 							onClick={() => window.location.reload()}>
 							Kev's Mazer
 						</a>
@@ -61,7 +61,7 @@ export default class Navbar extends Component {
 							className="navbar-toggler"
 							type="button"
 							data-bs-toggle="collapse"
-							data-bs-target="#navbarColor01"
+							data-bs-target="navbarColor01"
 							aria-controls="navbarColor01"
 							aria-expanded="false"
 							aria-label="Toggle navigation">
@@ -75,43 +75,39 @@ export default class Navbar extends Component {
 									<a
 										className="nav-link dropdown-toggle"
 										data-bs-toggle="dropdown"
-										href="/#"
+										href="/"
 										role="button"
 										aria-haspopup="true"
 										aria-expanded="false">
 										Select Algorithms
 									</a>
 									<div className="dropdown-menu">
-										<a
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.selectAlgorithm("Dijkstra")}>
 											Dijkstra's Algorithm
-										</a>
-										<a
+										</button>
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.selectAlgorithm("A*")}>
 											A Star Algorithm
-										</a>
-										<a
+										</button>
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.selectAlgorithm("DFS")}>
 											Depth First Search (DFS)
-										</a>
+										</button>
 
 										{/* <div className="dropdown-divider"></div> */}
-										<a
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.selectAlgorithm("BFS")}>
 											Breath First Search (BFS)
-										</a>
+										</button>
 									</div>
 								</li>
 
@@ -120,34 +116,31 @@ export default class Navbar extends Component {
 									<a
 										className="nav-link dropdown-toggle"
 										data-bs-toggle="dropdown"
-										href="/#"
+										href="/"
 										role="button"
 										aria-haspopup="true"
 										aria-expanded="false">
 										Maze Generator
 									</a>
 									<div className="dropdown-menu">
-										<a
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.selectMaze("randomMaze")}>
 											Random Maze
-										</a>
-										<a
+										</button>
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.selectMaze("recursiveDivision")}>
 											Recursive Division Maze
-										</a>
-										<a
+										</button>
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.selectMaze("vertical")}>
 											Vertical Maze
-										</a>
+										</button>
 									</div>
 								</li>
 
@@ -156,34 +149,31 @@ export default class Navbar extends Component {
 									<a
 										className="nav-link dropdown-toggle"
 										data-bs-toggle="dropdown"
-										href="/#"
+										href="/"
 										role="button"
 										aria-haspopup="true"
 										aria-expanded="false">
 										Change Visualize Speed
 									</a>
 									<div className="dropdown-menu">
-										<a
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.changeSpeed(30)}>
 											Slow
-										</a>
-										<a
+										</button>
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.changeSpeed(15)}>
 											Normal
-										</a>
-										<a
+										</button>
+										<button
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
 											onClick={() => this.changeSpeed(2)}>
 											Fast
-										</a>
+										</button>
 									</div>
 								</li>
 								{/* Change grid size */}
@@ -191,7 +181,7 @@ export default class Navbar extends Component {
 									<a
 										className="nav-link dropdown-toggle"
 										data-bs-toggle="dropdown"
-										href="/#"
+										href="/"
 										role="button"
 										aria-haspopup="true"
 										aria-expanded="false">
@@ -201,14 +191,14 @@ export default class Navbar extends Component {
 										<a
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
+											href="/"
 											onClick={() => this.nodeSize("normal")}>
 											Normal
 										</a>
 										<a
 											className="dropdown-item"
 											data-toggle="tab"
-											href="/#"
+											href="/"
 											onClick={() => this.nodeSize("grand")}>
 											Grand
 										</a>
