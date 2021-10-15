@@ -29,7 +29,6 @@ export default class Navbar extends Component {
 				? "Recursive"
 				: "Vertical";
 
-		console.log(mazeName);
 		this.setState({ maze: mazeName });
 		this.props.selectMaze(selection);
 	}
