@@ -10,7 +10,4 @@ function App() {
 	);
 }
 
-//Test
-function test() {}
-
 export default App;
