@@ -12,6 +12,7 @@ export default class Node extends Component {
 		const {
 			col,
 			row,
+			nodeSize,
 			isFinish,
 			isStart,
 			isWall,
@@ -21,7 +22,7 @@ export default class Node extends Component {
 		} = this.props;
 
 		// Return the correct class name for each node
-		function getClassName(isFinish, isStart, isWall) {
+		function getSecondClassName(isFinish, isStart, isWall) {
 			if (isFinish) {
 				return "node-finish";
 			} else if (isStart) {
@@ -32,12 +33,22 @@ export default class Node extends Component {
 				return "";
 			}
 		}
-		const extraClassName = getClassName(isFinish, isStart, isWall);
+
+		function getFirstClassName(nodeSize) {
+			if (nodeSize === "grand") {
+				return "node-grand";
+			} else {
+				return "node";
+			}
+		}
+
+		const nodeClassName = getFirstClassName(nodeSize);
+		const extraClassName = getSecondClassName(isFinish, isStart, isWall);
 
 		return (
 			<div
 				id={`node-${row}-${col}`}
-				className={`node ${extraClassName}`}
+				className={`${nodeClassName} ${extraClassName}`}
 				onMouseUp={() => onMouseUp()}
 				onMouseEnter={() => onMouseEnter(row, col)}
 				onMouseDown={() => onMouseDown(row, col)}></div>

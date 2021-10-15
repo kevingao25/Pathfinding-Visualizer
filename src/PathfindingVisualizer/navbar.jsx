@@ -12,7 +12,7 @@ export default class Navbar extends Component {
 		super();
 		this.state = {
 			algorithm: "Dijkstra",
-			maze: "Generate Maze",
+			maze: "Random",
 		};
 	}
 
@@ -22,7 +22,15 @@ export default class Navbar extends Component {
 	}
 
 	selectMaze(selection) {
-		this.setState({ maze: selection });
+		const mazeName =
+			selection === "randomMaze"
+				? "Random"
+				: selection === "recursiveDivision"
+				? "Recursive"
+				: "Vertical";
+
+		console.log(mazeName);
+		this.setState({ maze: mazeName });
 		this.props.selectMaze(selection);
 	}
 
@@ -30,10 +38,15 @@ export default class Navbar extends Component {
 		this.props.changeSpeed(selection);
 	}
 
+	nodeSize(selection) {
+		this.props.nodeSize(selection);
+	}
+
 	render() {
 		const { clearGrid, fire, generateMaze } = this.props;
 
 		const algoName = this.state.algorithm;
+		const mazeName = this.state.maze;
 
 		return (
 			<div>
@@ -126,15 +139,15 @@ export default class Navbar extends Component {
 											className="dropdown-item"
 											data-toggle="tab"
 											href="/#"
-											onClick={() => this.selectMaze("Prim")}>
-											Prim's Algorithm
+											onClick={() => this.selectMaze("recursiveDivision")}>
+											Recursive Division Maze
 										</a>
 										<a
 											className="dropdown-item"
 											data-toggle="tab"
 											href="/#"
-											onClick={() => this.selectMaze("...")}>
-											Something else here
+											onClick={() => this.selectMaze("vertical")}>
+											Vertical Maze
 										</a>
 									</div>
 								</li>
@@ -174,6 +187,34 @@ export default class Navbar extends Component {
 										</a>
 									</div>
 								</li>
+								{/* Change grid size */}
+								{/* <li className="nav-item dropdown">
+									<a
+										className="nav-link dropdown-toggle"
+										data-bs-toggle="dropdown"
+										href="/#"
+										role="button"
+										aria-haspopup="true"
+										aria-expanded="false">
+										Grid Size
+									</a>
+									<div className="dropdown-menu">
+										<a
+											className="dropdown-item"
+											data-toggle="tab"
+											href="/#"
+											onClick={() => this.nodeSize("normal")}>
+											Normal
+										</a>
+										<a
+											className="dropdown-item"
+											data-toggle="tab"
+											href="/#"
+											onClick={() => this.nodeSize("grand")}>
+											Grand
+										</a>
+									</div>
+								</li> */}
 							</ul>
 						</div>
 					</div>
@@ -181,7 +222,7 @@ export default class Navbar extends Component {
 				<div className="fireBtn">
 					<h1>Pathfinding Visualizer</h1>
 					<button className="bg-info" onClick={() => generateMaze()}>
-						Generate Maze
+						Generate {mazeName} Maze
 					</button>
 					<button
 						className="bg-warning"

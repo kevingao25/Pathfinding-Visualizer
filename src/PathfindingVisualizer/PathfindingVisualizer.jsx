@@ -8,15 +8,16 @@ import { Astar, reconstructPath } from "../Algorithms/Astar";
 import { randomMaze } from "../Algorithms/randomMaze";
 import { depthFirstSearch, NodesInPathOrder_DFS } from "../Algorithms/DFS";
 import { breadthFirstSearch, NodesInPathOrder_BFS } from "../Algorithms/BFS";
+import { recursiveDivisionMaze } from "../Algorithms/recursiveDivision";
+import { verticalMaze } from "../Algorithms/verticalMaze";
 
-const ROW_NUM = Math.floor((window.innerHeight * 0.75) / 25);
-const COL_NUM = Math.floor(window.innerWidth / 25);
-// console.log(ROW_NUM, COL_NUM);
+var ROW_NUM = Math.floor((window.innerHeight * 0.75) / 25);
+var COL_NUM = Math.floor(window.innerWidth / 25);
 
-const START_NODE_ROW = 6;
-const START_NODE_COL = 7;
-const FINISH_NODE_ROW = ROW_NUM - 5;
-const FINISH_NODE_COL = COL_NUM - 5;
+var START_NODE_ROW = 6;
+var START_NODE_COL = 7;
+var FINISH_NODE_ROW = ROW_NUM - 5;
+var FINISH_NODE_COL = COL_NUM - 5;
 
 export default class PathfindingVisualizer extends Component {
 	constructor() {
@@ -28,6 +29,7 @@ export default class PathfindingVisualizer extends Component {
 			algorithm: "Dijkstra",
 			maze: "randomMaze",
 			speed: 2,
+			nodeSize: "normal",
 		};
 	}
 
@@ -40,6 +42,7 @@ export default class PathfindingVisualizer extends Component {
 		return {
 			col,
 			row,
+			nodeSize: this.state.nodeSize,
 			isStart: row === START_NODE_ROW && col === START_NODE_COL,
 			isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
 			distance: Infinity,
@@ -101,9 +104,9 @@ export default class PathfindingVisualizer extends Component {
 
 	clearGrid() {
 		if (this.state.visualizing === false) {
+			this.setInitialGrid();
 			this.clearPath();
 			this.clearWall();
-			this.setInitialGrid();
 		}
 	}
 
@@ -239,7 +242,10 @@ export default class PathfindingVisualizer extends Component {
 
 		if (this.state.maze === "randomMaze") {
 			walls = randomMaze(grid, startNode, finishNode);
-			console.log(walls);
+		} else if (this.state.maze === "recursiveDivision") {
+			walls = recursiveDivisionMaze(grid, startNode, finishNode);
+		} else if (this.state.maze === "vertical") {
+			walls = verticalMaze(grid, startNode, finishNode);
 		}
 
 		this.animateWalls(walls);
@@ -268,7 +274,7 @@ export default class PathfindingVisualizer extends Component {
 		// testing
 		setTimeout(() => {
 			console.log(this.state.algorithm);
-		}, 2000);
+		}, 1000);
 	};
 
 	handleMazeSelection = (childData) => {
@@ -277,6 +283,24 @@ export default class PathfindingVisualizer extends Component {
 
 	changeSpeed = (childData) => {
 		this.setState({ speed: childData });
+	};
+
+	// NOT WORKING
+	changeNodeSize = (childData) => {
+		console.log(childData);
+		if (childData === "grand") {
+			this.setState({ nodeSize: "grand" });
+			ROW_NUM = Math.floor((window.innerHeight * 0.75) / 15);
+			COL_NUM = Math.floor(window.innerWidth / 15);
+			START_NODE_ROW = 6;
+			START_NODE_COL = 7;
+			FINISH_NODE_ROW = ROW_NUM - 5;
+			FINISH_NODE_COL = COL_NUM - 5;
+			setTimeout(() => {
+				console.log(this.state.nodeSize);
+				this.setInitialGrid();
+			}, 1000);
+		}
 	};
 
 	render() {
@@ -289,6 +313,7 @@ export default class PathfindingVisualizer extends Component {
 						selectAlgo={this.handleAlgoSelection}
 						selectMaze={this.handleMazeSelection}
 						changeSpeed={this.changeSpeed}
+						// nodeSize={this.changeNodeSize}
 						fire={() => this.visualizeAlgorithm()}
 						generateMaze={() => this.visualizeMaze()}></Navbar>
 				</div>
@@ -299,13 +324,14 @@ export default class PathfindingVisualizer extends Component {
 						return (
 							<div key={rowIdx} className="row-default">
 								{row.map((node, nodeIdx) => {
-									const { row, col, isFinish, isStart, isWall } = node;
+									const { row, col, isFinish, isStart, isWall, nodeSize } = node;
 									return (
 										<Node
 											// Pass in the props to Node component
 											key={nodeIdx}
 											col={col}
 											row={row}
+											nodeSize={nodeSize}
 											isFinish={isFinish}
 											isStart={isStart}
 											isWall={isWall}
