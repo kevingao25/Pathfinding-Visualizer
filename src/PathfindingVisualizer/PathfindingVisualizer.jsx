@@ -6,6 +6,8 @@ import Navbar from "./navbar";
 import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
 import { Astar, reconstructPath } from "../Algorithms/Astar";
 import { randomMaze } from "../Algorithms/randomMaze";
+import { depthFirstSearch, NodesInPathOrder_DFS } from "../Algorithms/DFS";
+import { breadthFirstSearch, NodesInPathOrder_BFS } from "../Algorithms/BFS";
 
 const ROW_NUM = Math.floor((window.innerHeight * 0.75) / 25);
 const COL_NUM = Math.floor(window.innerWidth / 25);
@@ -25,6 +27,7 @@ export default class PathfindingVisualizer extends Component {
 			visualizing: false,
 			algorithm: "Dijkstra",
 			maze: "randomMaze",
+			speed: 2,
 		};
 	}
 
@@ -70,14 +73,12 @@ export default class PathfindingVisualizer extends Component {
 			for (let row = 0; row < ROW_NUM; row++) {
 				for (let col = 0; col < COL_NUM; col++) {
 					if (
-						document.getElementById(`node-${row}-${col}`)
-							.className === "node node-shortest-path" ||
-						document.getElementById(`node-${row}-${col}`)
-							.className === "node node-visited"
+						document.getElementById(`node-${row}-${col}`).className ===
+							"node node-shortest-path" ||
+						document.getElementById(`node-${row}-${col}`).className ===
+							"node node-visited"
 					) {
-						document.getElementById(
-							`node-${row}-${col}`
-						).className = "node";
+						document.getElementById(`node-${row}-${col}`).className = "node";
 					}
 				}
 			}
@@ -89,12 +90,9 @@ export default class PathfindingVisualizer extends Component {
 			for (let row = 0; row < ROW_NUM; row++) {
 				for (let col = 0; col < COL_NUM; col++) {
 					if (
-						document.getElementById(`node-${row}-${col}`)
-							.className === "node node-wall"
+						document.getElementById(`node-${row}-${col}`).className === "node node-wall"
 					) {
-						document.getElementById(
-							`node-${row}-${col}`
-						).className = "node";
+						document.getElementById(`node-${row}-${col}`).className = "node";
 					}
 				}
 			}
@@ -124,22 +122,14 @@ export default class PathfindingVisualizer extends Component {
 	// Handle mouse events for wall setting
 	handleMouseDown(row, col) {
 		if (this.state.visualizing === false) {
-			const newGrid = getNewGridWithWallToggled(
-				this.state.grid,
-				row,
-				col
-			);
+			const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
 			this.setState({ grid: newGrid, mouseIsPressed: true });
 		}
 	}
 
 	handleMouseEnter(row, col) {
 		if (this.state.mouseIsPressed && this.state.visualizing === false) {
-			const newGrid = getNewGridWithWallToggled(
-				this.state.grid,
-				row,
-				col
-			);
+			const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
 			this.setState({ grid: newGrid, mouseIsPressed: true });
 		}
 	}
@@ -168,28 +158,25 @@ export default class PathfindingVisualizer extends Component {
 
 	// visualizeAlgorithm -> animateVisitedNodes -> animateShortestPath
 	animateVisitedNodes(visitedNodesInOrder, nodeInShortestPathOrder) {
-		if (
-			visitedNodesInOrder === undefined ||
-			nodeInShortestPathOrder === undefined
-		) {
+		if (visitedNodesInOrder === undefined || nodeInShortestPathOrder === undefined) {
 			return;
 		}
+		const speed = this.state.speed;
 		for (let i = 0; i <= visitedNodesInOrder.length; i++) {
 			// Animate the shortest path after animating dijkstra
 			if (i === visitedNodesInOrder.length) {
 				setTimeout(() => {
 					this.animateShortestPath(nodeInShortestPathOrder);
-				}, 2 * i);
+				}, speed * i);
 				return;
 			}
 			setTimeout(() => {
 				const node = visitedNodesInOrder[i];
 				if (!node.isStart && !node.isFinish) {
-					document.getElementById(
-						`node-${node.row}-${node.col}`
-					).className = "node node-visited";
+					document.getElementById(`node-${node.row}-${node.col}`).className =
+						"node node-visited";
 				}
-			}, 2 * i);
+			}, speed * i);
 		}
 	}
 
@@ -199,9 +186,8 @@ export default class PathfindingVisualizer extends Component {
 			setTimeout(() => {
 				const node = nodeInShortestPathOrder[i];
 				if (!node.isStart && !node.isFinish) {
-					document.getElementById(
-						`node-${node.row}-${node.col}`
-					).className = "node node-shortest-path";
+					document.getElementById(`node-${node.row}-${node.col}`).className =
+						"node node-shortest-path";
 				}
 			}, 30 * i);
 		}
@@ -229,7 +215,12 @@ export default class PathfindingVisualizer extends Component {
 		} else if (this.state.algorithm === "A*") {
 			visitedNodesInOrder = Astar(grid, startNode, finishNode);
 			nodeInShortestPathOrder = reconstructPath(finishNode);
-			console.log(visitedNodesInOrder);
+		} else if (this.state.algorithm === "DFS") {
+			visitedNodesInOrder = depthFirstSearch(grid, startNode, finishNode);
+			nodeInShortestPathOrder = NodesInPathOrder_DFS(finishNode);
+		} else if (this.state.algorithm === "BFS") {
+			visitedNodesInOrder = breadthFirstSearch(grid, startNode, finishNode);
+			nodeInShortestPathOrder = NodesInPathOrder_BFS(finishNode);
 		}
 		this.animateVisitedNodes(visitedNodesInOrder, nodeInShortestPathOrder);
 	}
@@ -263,9 +254,8 @@ export default class PathfindingVisualizer extends Component {
 			setTimeout(() => {
 				const node = walls[i];
 				grid[node.row][node.col].isWall = true;
-				document.getElementById(
-					`node-${node.row}-${node.col}`
-				).className = "node node-wall";
+				document.getElementById(`node-${node.row}-${node.col}`).className =
+					"node node-wall";
 			}, 5 * i);
 		}
 		setTimeout(() => {
@@ -283,10 +273,10 @@ export default class PathfindingVisualizer extends Component {
 
 	handleMazeSelection = (childData) => {
 		this.setState({ maze: childData });
-		// testing
-		setTimeout(() => {
-			console.log(this.state.maze);
-		}, 2000);
+	};
+
+	changeSpeed = (childData) => {
+		this.setState({ speed: childData });
 	};
 
 	render() {
@@ -298,6 +288,7 @@ export default class PathfindingVisualizer extends Component {
 						clearGrid={() => this.clearGrid()}
 						selectAlgo={this.handleAlgoSelection}
 						selectMaze={this.handleMazeSelection}
+						changeSpeed={this.changeSpeed}
 						fire={() => this.visualizeAlgorithm()}
 						generateMaze={() => this.visualizeMaze()}></Navbar>
 				</div>
@@ -308,13 +299,7 @@ export default class PathfindingVisualizer extends Component {
 						return (
 							<div key={rowIdx} className="row-default">
 								{row.map((node, nodeIdx) => {
-									const {
-										row,
-										col,
-										isFinish,
-										isStart,
-										isWall,
-									} = node;
+									const { row, col, isFinish, isStart, isWall } = node;
 									return (
 										<Node
 											// Pass in the props to Node component
@@ -331,9 +316,7 @@ export default class PathfindingVisualizer extends Component {
 											onMouseEnter={(row, col) =>
 												this.handleMouseEnter(row, col)
 											}
-											onMouseUp={() =>
-												this.handleMouseUp()
-											}></Node>
+											onMouseUp={() => this.handleMouseUp()}></Node>
 									);
 								})}
 							</div>
