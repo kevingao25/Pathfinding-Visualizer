@@ -21,30 +21,23 @@ I've always been fascinated by the efficiency of pathfinding algorithms, and imp
 ## Algorithms 
 
 **Pathfinding algorithms**
-- Dijkstra's algorithm
-- A* Algorithm
-- BFS (Breadth First Search)
-- DFS (Depth First Search) 
+- [x] Dijkstra's algorithm
+- [x] A* Algorithm
+- [x] BFS (Breadth First Search)
+- [x] DFS (Depth First Search) 
 
 **Maze Generation**
-- Random Wall Generation
-- Recursive Division Maze
-- Vertical Maze Generation
-
-## To-do
-
-This app is currently at Version 1.0, there will have many more features comming up!
-- Responsive layout (including mobile devices)
-- Provide weights for walls
-- Adapt to different grid and node size, increase the number of nodes on display
-- Implement Bellman-ford, Prim's Maze generation algorithms
+- [x] Random Wall Generation
+- [x] Recursive Division Maze
+- [x] Vertical Maze Generation
 
 <br>
+
 
 ![gif](/img/Pathfinding-Visualizer-Grand.gif) 
 
 <br>
 
-**In case you wonder, here is the avicon :)**
+**In case your wondering, here is the avicon :)**
 
 <img style="width: 300px; height: 300px;" src="/img/avicon.jpg" />
